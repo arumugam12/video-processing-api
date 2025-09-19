@@ -1,0 +1,312 @@
+{
+  "info": {
+    "name": "Video Processing API",
+    "description": "Postman collection for the FastAPI video processing service (upload, trim, overlays, watermark, transcode, jobs).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "f1d8c5b6-0000-4000-9000-000000000001"
+  },
+  "item": [
+    {
+      "name": "Videos - Upload",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{sample_video_path}}"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/videos/upload",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "videos",
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Videos - List",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/videos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "videos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Videos - Download Original",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/videos/{{video_id}}/download",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "videos",
+            "{{video_id}}",
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Trim - Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"start_time\": 2.0,\n  \"end_time\": 6.0\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/trim",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "trim"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Overlay - Text",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"kind\": \"text\",\n  \"text\": \"नमस्ते दुनिया\",\n  \"fontfile\": \"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf\",\n  \"position_x\": 50,\n  \"position_y\": 50,\n  \"start_time\": 0,\n  \"opacity\": 1.0\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/overlays",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "overlays"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Overlay - Image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"kind\": \"image\",\n  \"image_url\": \"https://raw.githubusercontent.com/github/explore/main/topics/python/python.png\",\n  \"position_x\": 20,\n  \"position_y\": 20,\n  \"opacity\": 0.8\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/overlays",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "overlays"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Overlay - Video",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"kind\": \"video\",\n  \"video_url\": \"https://sample-videos.com/video321/mp4/240/big_buck_bunny_240p_1mb.mp4\",\n  \"position_x\": 10,\n  \"position_y\": 10\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/overlays",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "overlays"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Watermark - Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"kind\": \"watermark\",\n  \"image_url\": \"https://raw.githubusercontent.com/github/explore/main/topics/docker/docker.png\",\n  \"position_x\": 20,\n  \"position_y\": 20,\n  \"opacity\": 0.7\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/watermark",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "watermark"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Transcode - Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"video_id\": \"{{video_id}}\",\n  \"qualities\": [\"1080p\", \"720p\", \"480p\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transcode",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transcode"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Jobs - Status",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/status/{{job_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "status",
+            "{{job_id}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Jobs - Result (Download)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/result/{{job_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "result",
+            "{{job_id}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Processed - List",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/videos/{{video_id}}/processed",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "videos",
+            "{{video_id}}",
+            "processed"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Processed - Download Quality",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/videos/{{video_id}}/download/{{quality}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "videos",
+            "{{video_id}}",
+            "download",
+            "{{quality}}"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "video_id",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "job_id",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "quality",
+      "value": "720p"
+    },
+    {
+      "key": "sample_video_path",
+      "value": "C:/path/to/sample.mp4"
+    }
+  ]
+}
+
+
+
+
