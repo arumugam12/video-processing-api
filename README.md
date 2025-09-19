@@ -56,5 +56,45 @@ All media stored under /app/data (mounted to ./data via docker-compose).
 Migrations
 Alembic is included; initial metadata is auto-created on startup for convenience. For production, generate and apply migrations.
 
-Local development (optional)
-- See backend/README.md for running without Docker.
+Testing
+Test cases are provided in `backend/app/tests/test_api.py` using pytest and FastAPI TestClient.
+
+To run tests:
+
+1. Ensure the API and database are running (e.g., via Docker Compose).
+2. Install test dependencies if needed:
+   ```bash
+   pip install pytest requests
+   ```
+3. Run the tests:
+   ```bash
+   cd backend/app
+   pytest tests/
+   ```
+
+You may need to adjust test data (e.g., use real video/job IDs or add fixtures).
+
+Cloud Deployment
+
+A deployment script `deploy.sh` is provided at the project root for cloud/server deployment.
+
+To use:
+
+1. Copy the repo to your cloud server (e.g., AWS EC2, DigitalOcean, Azure VM).
+2. Make the script executable:
+   ```bash
+   chmod +x deploy.sh
+   ```
+3. Run the script:
+   ```bash
+   ./deploy.sh
+   ```
+4. After completion, your API should be available at `http://<your-cloud-ip>:8000/` (replace with your server's public IP).
+
+The script will:
+- Set environment variables
+- Build and start Docker Compose
+- Wait for services to start
+- Run database migrations
+
+You can check logs with `docker-compose logs backend` if any service fails to start.
