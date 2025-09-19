@@ -2,7 +2,7 @@ Backend Engineer Assignment – Video Processing APIs (FastAPI + Celery + Postgr
 
 This repository contains a FastAPI backend implementing all the levels in the assignment: upload + metadata, trimming, overlays/watermark, async job queue with status/result, and multiple output qualities. It includes Postgres schema + Alembic migration, ffmpeg integration, Docker setup, and OpenAPI docs.
 
-[Watch Demo Video](https://drive.google.com/file/d/1E5ZJHbA7i8WmHUdk7lxWhVag1kC-mNQ_/view?usp=sharing)
+[Watch Demo Video](https://drive.google.com/file/d/1mympNPB5VaNKKQ6T3HsoQcXo_xIF8Rs9/view?usp=sharing)
 
 Stack
 - FastAPI (HTTP APIs)
