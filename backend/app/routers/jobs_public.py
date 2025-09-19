@@ -24,7 +24,7 @@ def public_result(job_id: uuid.UUID, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Job not found")
     if job.status != "finished" or not job.result_path:
         raise HTTPException(status_code=400, detail="Result not ready")
-    return FileResponse(job.result_path, filename=f"result_{job.id}.mp4")
+    return FileResponse(job.result_path, media_type="video/mp4", filename=f"result_{job.id}.mp4")
 
 
 

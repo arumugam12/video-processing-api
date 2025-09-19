@@ -53,14 +53,15 @@ def build_drawtext_filter(text: str, x: int, y: int, start: float, end: Optional
 def overlay_image_filter(image_path: Path, x: int, y: int, start: float, end: Optional[float], opacity: float) -> List[str]:
     enable = f"between(t,{start},{end})" if end is not None else f"gte(t,{start})"
     alpha = max(0.0, min(opacity, 1.0))
-    # Use a simple filter chain: [0:v][1:v] overlay with alpha via format/lut
+
     return [
-        "-i",
-        str(image_path),
+        "-i", str(image_path),
         "-filter_complex",
-        f"[1][0]scale2ref[logo][base];[base][logo]overlay=x={x}:y={y}:enable='{enable}'",
-        "-pix_fmt",
-        "yuv420p",
+        f"[1:v]format=rgba,colorchannelmixer=aa={alpha}[logo];"
+        f"[0:v][logo]overlay={x}:{y}:enable='{enable}'[outv]",
+        "-map", "[outv]",
+        "-map", "0:a?",
+        "-pix_fmt", "yuv420p"
     ]
 
 
@@ -85,25 +86,44 @@ def apply_text_overlay(input_path: Path, output_path: Path, text: str, x: int, y
         str(input_path),
         "-vf",
         drawtext,
+        "-c:v",
+        "libx264",
+        "-profile:v",
+        "high",
+        "-level:v",
+        "4.0",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "23",
+        "-pix_fmt",
+        "yuv420p",
         "-c:a",
-        "copy",
+        "aac",
+        "-b:a",
+        "128k",
+        "-movflags",
+        "+faststart",
         str(output_path),
     ]
     subprocess.check_call(cmd)
 
 
 def apply_image_overlay(input_path: Path, output_path: Path, image_path: Path, x: int, y: int, start: float, end: Optional[float], opacity: float) -> None:
-    args = [
-        settings.ffmpeg_path,
-        "-y",
-        "-i",
-        str(input_path),
-    ] + overlay_image_filter(image_path, x, y, start, end, opacity) + [
-        "-c:a",
-        "copy",
-        str(output_path),
-    ]
-    subprocess.check_call(args)
+ args = [
+     settings.ffmpeg_path,
+     "-y",
+     "-i", str(input_path),
+ ] + overlay_image_filter(image_path, x, y, start, end, opacity) + [
+     "-c:v", "libx264",
+     "-preset", "veryfast",
+     "-crf", "23",
+     "-c:a", "aac",
+     "-b:a", "128k",
+     "-movflags", "+faststart",
+     str(output_path),
+ ]
+ subprocess.check_call(args)
 
 
 def apply_video_overlay(input_path: Path, output_path: Path, overlay_path: Path, x: int, y: int, start: float, end: Optional[float]) -> None:
@@ -113,8 +133,24 @@ def apply_video_overlay(input_path: Path, output_path: Path, overlay_path: Path,
         "-i",
         str(input_path),
     ] + overlay_video_filter(overlay_path, x, y, start, end) + [
+        "-c:v",
+        "libx264",
+        "-profile:v",
+        "high",
+        "-level:v",
+        "4.0",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "23",
+        "-pix_fmt",
+        "yuv420p",
         "-c:a",
-        "copy",
+        "aac",
+        "-b:a",
+        "128k",
+        "-movflags",
+        "+faststart",
         str(output_path),
     ]
     subprocess.check_call(args)
