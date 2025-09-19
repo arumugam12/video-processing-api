@@ -79,7 +79,7 @@ def test_watermark_job():
         "opacity": 1.0
     })
     assert response.status_code == 200
-    assert "job_id" in response.json()
+    assert "job_id" in response.json() 
 
 def test_transcode_job():
     # TODO: Replace with a real video_id
